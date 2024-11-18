@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetMealDishMapper">
+
+    <select id="getSetMealIdsByDishIds" resultType="java.lang.Long">
+        select * from setmeal_dish where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+<!--    插入菜品-->
+    <insert id="insert">
+        insert into setmeal_dish(setmeal_id, dish_id, name, price, copies)
+        values
+        <foreach collection="dishList" item="d" separator=",">
+            (#{d.setmealId},#{d.dishId},#{d.name},#{d.price},#{d.copies})
+        </foreach>
+    </insert>
+
+<!--    同套餐一起删除的菜品-->
+    <delete id="delete">
+        delete from setmeal_dish
+        where setmeal_id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
